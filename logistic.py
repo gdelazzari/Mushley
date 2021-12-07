@@ -7,17 +7,28 @@ import utils
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-def tmc_shapley(X, Y):
-    n = np.shape(X)[1]
-    print("number of features: ", np.shape(X))
-    (X_train, Y_train), (X_test, Y_test) = utils.split(X, Y, 0.8)
+def tmc_shapley(X_train, Y_train, X_test, Y_test):
+    n = np.shape(X_train)[1]
+
+    print(f"Number of features: {n}")
+
+    # create a LogisticRegression classifier with the given hyperparameters
     lr = LogisticRegression(max_iter = 1000)
-    v = np.zeros((n+1,1))
-    shapley = np.zeros((n+1,1))
+
+    # initialize the vector of shapley values for each feature
+    shapley = np.zeros((n, 1))
 
     for t in tqdm(range(1, 2*n), desc="samples", position=0):
-        X, perm = utils.feature_shuffle(X)
-        perm = perm+1
+        # obtain a permutation of the features, represented as a vector
+        # of indexes into the columns of X_train and X_test
+        perm = np.arange(n)
+        np.random.shuffle(perm)
+
+        # obtain the permutated versions of X_train and X_test
+        perm_X_train = X_train[perm]
+        perm_X_test = X_test[perm]
+
+        v = np.zeros((n + 1, 1))
 
         # NOTE: is this correct? Shouldn't 50% accuracy be assumed?
         v[0] = 0 # suppose to have zero accuracy with no training feature
@@ -25,10 +36,11 @@ def tmc_shapley(X, Y):
             if False: # implement performance threshold to neglect unimportant features
                 pass
             else:
-                lr.fit(X_train[:, :j], Y_train)
-                v[j] = lr.score(X_test[:, :j], Y_test)
+                lr.fit(perm_X_train[:, :j], Y_train)
+                v[j] = lr.score(perm_X_test[:, :j], Y_test)
 
         shapley[perm] = (t - 1) / t * shapley[perm] + (v[1:n+1] - v[0:n]) / t
+
     return shapley
 
 
@@ -44,6 +56,6 @@ lr.fit(X_train, Y_train)
 print(lr.score(X_test, Y_test))
 
 print("TMC-Shapley:")
-sh = tmc_shapley(X, Y) 
+sh = tmc_shapley(X_train, Y_train, X_test, Y_test) 
 plt.barh(y=np.arange(127), width=list(sh[:, 0]))
 plt.show()
