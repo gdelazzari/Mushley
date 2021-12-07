@@ -13,6 +13,15 @@ def shuffle(X: np.ndarray, Y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
 
     return X[idx], Y[idx]
 
+def feature_shuffle(X: np.ndarray) -> Tuple[np.ndarray, np.array]:
+    """
+    Randomly shuffles the features of a given dataset.
+    """
+
+    idx = np.arange(len(X[0]))
+    np.random.shuffle(idx)
+
+    return X[:][idx], idx
 
 def split(X: np.ndarray, Y: np.ndarray, p: float) -> Tuple[Tuple[np.ndarray, np.ndarray], Tuple[np.ndarray, np.ndarray]]:
     """
