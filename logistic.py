@@ -25,8 +25,8 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test):
         np.random.shuffle(perm)
 
         # obtain the permutated versions of X_train and X_test
-        perm_X_train = X_train[perm]
-        perm_X_test = X_test[perm]
+        perm_X_train = X_train[:, perm]
+        perm_X_test = X_test[:, perm]
 
         v = np.zeros((n + 1, 1))
 
