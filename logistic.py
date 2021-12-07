@@ -23,10 +23,10 @@ def tmc_shapley(X, Y):
             if False: # implement performance threshold to neglect unimportant features
                 pass
             else:
-                lr.fit(X_train[:, np.arange(j)], Y_train)
-                v[j] = lr.score(X_test[:, np.arange(j)], Y_test)
+                lr.fit(X_train[:, :j], Y_train)
+                v[j] = lr.score(X_test[:, :j], Y_test)
 
-        shapley[perm] = (i-1)/i * shapley[perm] + (v[np.arange(n) + 1] - v[np.arange(n)]) /i
+        shapley[perm] = (i - 1) / i * shapley[perm] + (v[1:n+1] - v[0:n]) / i
     return shapley
 
 
