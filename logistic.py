@@ -18,6 +18,8 @@ def tmc_shapley(X, Y):
     for t in tqdm(range(1, 2*n), desc="samples", position=0):
         X, perm = utils.feature_shuffle(X)
         perm = perm+1
+
+        # NOTE: is this correct? Shouldn't 50% accuracy be assumed?
         v[0] = 0 # suppose to have zero accuracy with no training feature
         for j in tqdm(range(1, n), desc="subsets", position=1, leave=False):
             if False: # implement performance threshold to neglect unimportant features
