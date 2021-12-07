@@ -16,7 +16,7 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test):
     lr = LogisticRegression(max_iter = 1000)
 
     # initialize the vector of shapley values for each feature
-    shapley = np.zeros((n, 1))
+    shapley = np.zeros(n)
 
     for t in tqdm(range(1, 2*n), desc="samples", position=0):
         # obtain a permutation of the features, represented as a vector
@@ -28,10 +28,11 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test):
         perm_X_train = X_train[:, perm]
         perm_X_test = X_test[:, perm]
 
-        v = np.zeros((n + 1, 1))
+        v = np.zeros(n + 1)
 
         # NOTE: is this correct? Shouldn't 50% accuracy be assumed?
-        v[0] = 0 # suppose to have zero accuracy with no training feature
+        v[0] = 0 # suppose to have zero accuracy with no training features
+
         for j in tqdm(range(1, n), desc="subsets", position=1, leave=False):
             if False: # implement performance threshold to neglect unimportant features
                 pass
@@ -39,7 +40,7 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test):
                 lr.fit(perm_X_train[:, :j], Y_train)
                 v[j] = lr.score(perm_X_test[:, :j], Y_test)
 
-        shapley[perm] = (t - 1) / t * shapley[perm] + (v[1:n+1] - v[0:n]) / t
+            shapley[perm[j]] = (t - 1) / t * shapley[perm[j]] + (v[j] - v[j - 1]) / t
 
     return shapley
 
