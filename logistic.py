@@ -15,7 +15,7 @@ def tmc_shapley(X, Y):
     v = np.zeros((n+1,1))
     shapley = np.zeros((n+1,1))
 
-    for i in tqdm(range(1, 2*n), desc="samples", position=0):
+    for t in tqdm(range(1, 2*n), desc="samples", position=0):
         X, perm = utils.feature_shuffle(X)
         perm = perm+1
         v[0] = 0 # suppose to have zero accuracy with no training feature
@@ -26,7 +26,7 @@ def tmc_shapley(X, Y):
                 lr.fit(X_train[:, :j], Y_train)
                 v[j] = lr.score(X_test[:, :j], Y_test)
 
-        shapley[perm] = (i - 1) / i * shapley[perm] + (v[1:n+1] - v[0:n]) / i
+        shapley[perm] = (t - 1) / t * shapley[perm] + (v[1:n+1] - v[0:n]) / t
     return shapley
 
 

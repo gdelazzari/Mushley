@@ -23,3 +23,6 @@ $ python logistic.py
 ```
 
 to verify the performance of the logistic regression classifier.
+
+## References
+[1]: Ghorbani, A. and Zou, J., “Data Shapley: Equitable Valuation of Data for Machine Learning”, *arXiv e-prints*, 2019
