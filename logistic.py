@@ -7,13 +7,18 @@ import utils
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-def tmc_shapley(X_train, Y_train, X_test, Y_test):
+
+def tmc_shapley(X_train, Y_train, X_test, Y_test, perf_tolerance: float = 0.01):
     n = np.shape(X_train)[1]
 
     print(f"Number of features: {n}")
 
     # create a LogisticRegression classifier with the given hyperparameters
     lr = LogisticRegression(max_iter = 1000)
+
+    # obtain the score using all of the features
+    lr.fit(X_train, Y_train)
+    vD = lr.score(X_test, Y_test)
 
     # initialize the vector of shapley values for each feature
     shapley = np.zeros(n)
@@ -35,8 +40,8 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test):
             v[0] = 0 # suppose to have zero accuracy with no training features
 
             for j in tqdm(range(1, n), desc="subsets", position=1, leave=False):
-                if False: # implement performance threshold to neglect unimportant features
-                    pass
+                if abs(vD - v[j - 1]) < perf_tolerance:
+                    v[j] = v[j - 1]
                 else:
                     lr.fit(perm_X_train[:, :j], Y_train)
                     v[j] = lr.score(perm_X_test[:, :j], Y_test)
