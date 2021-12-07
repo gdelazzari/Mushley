@@ -58,5 +58,5 @@ print(lr.score(X_test, Y_test))
 
 print("TMC-Shapley:")
 sh = tmc_shapley(X_train, Y_train, X_test, Y_test) 
-plt.barh(y=np.arange(127), width=list(sh[:, 0]))
+plt.barh(y=np.arange(len(sh)), width=list(sh))
 plt.show()
