@@ -39,14 +39,14 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test, perf_tolerance: float = 0.01):
             # NOTE: is this correct? Shouldn't 50% accuracy be assumed?
             v[0] = 0 # suppose to have zero accuracy with no training features
 
-            for j in tqdm(range(1, n), desc="subsets", position=1, leave=False):
+            for j in tqdm(range(1, n + 1), desc="subsets", position=1, leave=False):
                 if abs(vD - v[j - 1]) < perf_tolerance:
                     v[j] = v[j - 1]
                 else:
                     lr.fit(perm_X_train[:, :j], Y_train)
                     v[j] = lr.score(perm_X_test[:, :j], Y_test)
 
-                shapley[perm[j]] = (t - 1) / t * shapley[perm[j]] + (v[j] - v[j - 1]) / t
+                shapley[perm[j - 1]] = (t - 1) / t * shapley[perm[j - 1]] + (v[j] - v[j - 1]) / t
     
     except KeyboardInterrupt:
         # Allow to break early with Ctrl+C.
