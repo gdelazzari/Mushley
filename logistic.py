@@ -24,7 +24,7 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test, perf_tolerance: float = 0.01):
     shapley = np.zeros(n)
 
     try:
-        for t in tqdm(range(1, 2*n), desc="samples", position=0):
+        for t in tqdm(range(1, 2*n), desc="samples", position=0, smoothing=0.0):
             # obtain a permutation of the features, represented as a vector
             # of indexes into the columns of X_train and X_test
             perm = np.arange(n)
