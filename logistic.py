@@ -18,29 +18,36 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test):
     # initialize the vector of shapley values for each feature
     shapley = np.zeros(n)
 
-    for t in tqdm(range(1, 2*n), desc="samples", position=0):
-        # obtain a permutation of the features, represented as a vector
-        # of indexes into the columns of X_train and X_test
-        perm = np.arange(n)
-        np.random.shuffle(perm)
+    try:
+        for t in tqdm(range(1, 2*n), desc="samples", position=0):
+            # obtain a permutation of the features, represented as a vector
+            # of indexes into the columns of X_train and X_test
+            perm = np.arange(n)
+            np.random.shuffle(perm)
 
-        # obtain the permutated versions of X_train and X_test
-        perm_X_train = X_train[:, perm]
-        perm_X_test = X_test[:, perm]
+            # obtain the permutated versions of X_train and X_test
+            perm_X_train = X_train[:, perm]
+            perm_X_test = X_test[:, perm]
 
-        v = np.zeros(n + 1)
+            v = np.zeros(n + 1)
 
-        # NOTE: is this correct? Shouldn't 50% accuracy be assumed?
-        v[0] = 0 # suppose to have zero accuracy with no training features
+            # NOTE: is this correct? Shouldn't 50% accuracy be assumed?
+            v[0] = 0 # suppose to have zero accuracy with no training features
 
-        for j in tqdm(range(1, n), desc="subsets", position=1, leave=False):
-            if False: # implement performance threshold to neglect unimportant features
-                pass
-            else:
-                lr.fit(perm_X_train[:, :j], Y_train)
-                v[j] = lr.score(perm_X_test[:, :j], Y_test)
+            for j in tqdm(range(1, n), desc="subsets", position=1, leave=False):
+                if False: # implement performance threshold to neglect unimportant features
+                    pass
+                else:
+                    lr.fit(perm_X_train[:, :j], Y_train)
+                    v[j] = lr.score(perm_X_test[:, :j], Y_test)
 
-            shapley[perm[j]] = (t - 1) / t * shapley[perm[j]] + (v[j] - v[j - 1]) / t
+                shapley[perm[j]] = (t - 1) / t * shapley[perm[j]] + (v[j] - v[j - 1]) / t
+    
+    except KeyboardInterrupt:
+        # Allow to break early with Ctrl+C.
+        # Since the result in `shapley` is iteratively computed, it is valid
+        # even in such case.
+        pass
 
     return shapley
 
