@@ -15,12 +15,11 @@ def tmc_shapley(X, Y):
     v = np.zeros((n+1,1))
     shapley = np.zeros((n+1,1))
 
-    for i in range(1, 2*n):
-        print("Run ", i)
+    for i in tqdm(range(1, 2*n), desc="samples", position=0):
         X, perm = utils.feature_shuffle(X)
         perm = perm+1
         v[0] = 0 # suppose to have zero accuracy with no training feature
-        for j in tqdm(range(1, n)):
+        for j in tqdm(range(1, n), desc="subsets", position=1, leave=False):
             if False: # implement performance threshold to neglect unimportant features
                 pass
             else:
