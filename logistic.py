@@ -66,9 +66,16 @@ lr = LogisticRegression()
 
 lr.fit(X_train, Y_train)
 
-print(lr.score(X_test, Y_test))
+print(f"Score of whole ensemble of features: {lr.score(X_test, Y_test)}\n")
 
 print("TMC-Shapley:")
 sh = tmc_shapley(X_train, Y_train, X_test, Y_test) 
 plt.barh(y=np.arange(len(sh)), width=list(sh))
+plt.show()
+
+# Check on Shapley values: sum must be equal to the total ensemble score
+# Check the distribution also
+print(f"\nSum of all Shapley values: {np.sum(sh)}\n")
+n_bins = 20
+plt.hist(sh, bins=n_bins)
 plt.show()
