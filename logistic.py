@@ -74,9 +74,12 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test, n_samples = None, perf_toleran
 
 
 X, Y = datasets.agaricus_lepiota()
-X, Y = utils.shuffle(X, Y)
 
-(X_train, Y_train), (X_test, Y_test) = utils.split(X, Y, 0.8)
+(X_train, Y_train), (X_test, Y_test) = utils.prepare_dataset(X, Y, 0.8)
+
+print(f"Using {len(Y_train)} training samples")
+print(f"Using {len(Y_test)} test samples")
+print(f"(using {len(Y_train) + len(Y_test)} samples out of {len(Y)} available)")
 
 lr = LogisticRegression()
 
