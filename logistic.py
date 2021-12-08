@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 
-def tmc_shapley(X_train, Y_train, X_test, Y_test, n_samples = None, perf_tolerance: float = 0.01, v_init = 0.0):
+def tmc_shapley(X_train, Y_train, X_test, Y_test, n_samples = None, perf_tolerance: float = 0.01, v_init = 0.0, save_results=True):
     n = np.shape(X_train)[1]
 
     print(f"Number of features: {n}")
@@ -59,7 +59,8 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test, n_samples = None, perf_toleran
         # even in such case.
         pass
 
-    np.save(f"{n_samples}-{perf_tolerance}-{v_init}.npy", shapley)
+    if save_results:
+        np.save(f"{n_samples}-{perf_tolerance}-{v_init}.npy", shapley)
 
     return shapley
 
