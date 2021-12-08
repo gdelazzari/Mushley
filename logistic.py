@@ -59,6 +59,8 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test, n_samples = None, perf_toleran
         # even in such case.
         pass
 
+    np.save(f"{n_samples}-{perf_tolerance}-{v_init}.npy", shapley)
+
     return shapley
 
 
