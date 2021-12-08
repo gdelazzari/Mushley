@@ -1,6 +1,6 @@
 import numpy as np
 
-from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 
 import datasets
 import utils
@@ -16,7 +16,7 @@ print(f"Using {len(Y_train)} training samples")
 print(f"Using {len(Y_test)} test samples")
 print(f"(using {len(Y_train) + len(Y_test)} samples out of {len(Y)} available)")
 
-c = LogisticRegression(max_iter=1000)
+c = KNeighborsClassifier(n_neighbors=5)
 v = lambda c, X_train, Y_train, X_test, Y_test: c.fit(X_train, Y_train).score(X_test, Y_test)
 
 vD = v(c, X_train, Y_train, X_test, Y_test)
