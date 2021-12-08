@@ -37,7 +37,7 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test, perf_tolerance: float = 0.01):
             v = np.zeros(n + 1)
 
             # NOTE: is this correct? Shouldn't 50% accuracy be assumed?
-            v[0] = 0 # suppose to have zero accuracy with no training features
+            v[0] = 0.5 # suppose to have zero accuracy with no training features
 
             for j in tqdm(range(1, n + 1), desc="subsets", position=1, leave=False):
                 if abs(vD - v[j - 1]) < perf_tolerance:
