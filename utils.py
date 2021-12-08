@@ -49,9 +49,6 @@ def prepare_dataset(X: np.ndarray, Y: np.ndarray, p: float) -> Tuple[Tuple[np.nd
     which must be within [0.0, 1.0]. This function does also randomly shuffle the
     dataset and ensures that the two splits are normalized with respect to the labels.
     """
-
-    # TODO: this function is slow as hell
-
     assert 0.0 <= p <= 1.0
     assert len(X) == len(Y)
 
@@ -78,10 +75,11 @@ def prepare_dataset(X: np.ndarray, Y: np.ndarray, p: float) -> Tuple[Tuple[np.nd
     X, Y = shuffle(X, Y)
 
     def pop_with_label(available_samples: List[int], wanted_label: int) -> Optional[int]:
-        valid = [(i, n) for i, n in enumerate(available_samples) if Y[n] == wanted_label]
+        valid = filter(lambda x: Y[x[1]] == wanted_label, enumerate(available_samples))
+        candidate = next(valid, None)
 
-        if len(valid) > 0:
-            i, n = valid[0]
+        if candidate is not None:
+            i, n = candidate
             available_samples.pop(i)
             return n
         else:
