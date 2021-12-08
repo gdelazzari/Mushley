@@ -10,7 +10,7 @@ from tqdm import tqdm
 import os.path
 
 
-def tmc_shapley(X_train, Y_train, X_test, Y_test, n_samples = None, perf_tolerance: float = 0.01, v_init = 0.0, save_results=True):
+def tmc_shapley(X_train, Y_train, X_test, Y_test, n_samples = None, perf_tolerance: float = 0.01, v_init = 0.5, save_results=True):
     n = np.shape(X_train)[1]
 
     print(f"Number of features: {n}")
