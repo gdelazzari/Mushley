@@ -75,8 +75,7 @@ def prepare_dataset(X: np.ndarray, Y: np.ndarray, p: float) -> Tuple[Tuple[np.nd
     X, Y = shuffle(X, Y)
 
     def pop_with_label(available_samples: List[int], wanted_label: int) -> Optional[int]:
-        valid = filter(lambda x: Y[x[1]] == wanted_label, enumerate(available_samples))
-        candidate = next(valid, None)
+        candidate = next(filter(lambda x: Y[x[1]] == wanted_label, enumerate(available_samples)), None)
 
         if candidate is not None:
             i, n = candidate

@@ -63,10 +63,8 @@ def tmc_shapley(
             perm_X_train = X_train[:, perm]
             perm_X_test = X_test[:, perm]
 
-            v = np.zeros(n + 1)
-
-            # NOTE: is this correct? Shouldn't 50% accuracy be assumed?
-            v_prev = v_init # suppose to have zero accuracy with no training features
+            # use the provided initial value for v
+            v_prev = v_init
 
             for j in tqdm(range(1, n + 1), desc="subsets", position=1, leave=False):
                 if abs(vD - v_prev) < perf_tolerance:
