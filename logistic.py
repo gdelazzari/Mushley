@@ -7,6 +7,8 @@ import utils
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
+import os.path
+
 
 def tmc_shapley(X_train, Y_train, X_test, Y_test, n_samples = None, perf_tolerance: float = 0.01, v_init = 0.0, save_results=True):
     n = np.shape(X_train)[1]
@@ -60,7 +62,13 @@ def tmc_shapley(X_train, Y_train, X_test, Y_test, n_samples = None, perf_toleran
         pass
 
     if save_results:
-        np.save(f"{n_samples}-{perf_tolerance}-{v_init}.npy", shapley)
+        basename = f"{n_samples}-{perf_tolerance}-{v_init}"
+
+        i = 0
+        while os.path.isfile(f"{basename}.{i}.npy"):
+            i += 1
+        
+        np.save(f"{basename}.{i}.npy", shapley)
 
     return shapley
 
