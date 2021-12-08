@@ -45,8 +45,8 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray]:
     assert len(FEATURES_LETTERS) == 22
     assert len(LABEL_LETTERS) == 2
 
-    def one_hot_encode(x: int, n: int) -> List[int]:
-        return [int(i == x) for i in range(n)]
+    # compute number of features after one-hot encoding
+    Xn = sum([len(c) for c in FEATURES_LETTERS])
 
     X = []
     Y = []
@@ -60,14 +60,18 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray]:
             assert label_letter in LABEL_LETTERS
             y = LABEL_LETTERS.index(label_letter)
 
-            x = []
+            x = np.zeros(Xn, dtype=float)
+            idx = 0 # track the starting index of the current feature
             for i, feature_letter in enumerate(features_letters):
                 assert i < 22
                 assert feature_letter in FEATURES_LETTERS[i]
 
                 feature_value = FEATURES_LETTERS[i].index(feature_letter)
 
-                x += one_hot_encode(feature_value, len(FEATURES_LETTERS[i]))
+                # one-hot encode the feature value into the feature vector X
+                x[idx + feature_value] = 1.0
+
+                idx += len(FEATURES_LETTERS[i])
      
             X.append(x)
             Y.append(y)
