@@ -12,6 +12,12 @@ X, Y, L = datasets.agaricus_lepiota()
 
 (X_train, Y_train), (X_test, Y_test) = utils.prepare_dataset(X, Y, 0.8)
 
+groups = []
+i = 0
+for l in L:
+    groups.append((i, i + l - 1))
+    i += l
+
 print(f"Using {len(Y_train)} training samples")
 print(f"Using {len(Y_test)} test samples")
 print(f"(using {len(Y_train) + len(Y_test)} samples out of {len(Y)} available)")
@@ -23,7 +29,7 @@ vD = v(c, X_train, Y_train, X_test, Y_test)
 print(f"Score of whole ensemble of features: {vD}\n")
 
 print("TMC-Shapley:")
-sh = tmc_shapley(X_train, Y_train, X_test, Y_test, c, v)
+sh = tmc_shapley(X_train, Y_train, X_test, Y_test, c, v, groups=groups)
 plt.barh(y=np.arange(len(sh)), width=list(sh))
 plt.show()
 
