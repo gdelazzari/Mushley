@@ -35,7 +35,9 @@ def tmc_shapley(
        passing groups=[(0, 2), (3, 4)] the Shapley value of the features {0, 1, 2} is
        jointly computed, same for the features {3, 4}; note that this list must "slice"
        the entire set of features, i.e. include all the features, with no overlaps, in
-       ascending order
+       ascending order; also, the intervals do include their extremes: an example of a
+       valid `groups` partition is [(0, 3), (4, 4), (5, 8), (9, 10)] for a set of 11
+       features
     - `n_samples` is the number of samples to compute, and defaults to 2*n where `n`
       is the number of features
     - `perf_tolerance` is a threshold for early termination of the samples evaluation
