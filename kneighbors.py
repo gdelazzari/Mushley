@@ -8,7 +8,7 @@ from shapley import tmc_shapley
 import matplotlib.pyplot as plt
 
 
-X, Y = datasets.agaricus_lepiota()
+X, Y, _ = datasets.agaricus_lepiota()
 
 (X_train, Y_train), (X_test, Y_test) = utils.prepare_dataset(X, Y, 0.8)
 

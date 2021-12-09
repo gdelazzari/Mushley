@@ -3,7 +3,7 @@ import numpy as np
 from typing import Tuple, List
 
 
-def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray]:
+def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[int]]:
     """
     Source:
     https://archive.ics.uci.edu/ml/datasets/Mushroom
@@ -13,7 +13,8 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray]:
     
     Returns the loaded dataset as a tuple of NumPy arrays, where the first contains
     (for each sample) the concatenation of all the features (which are one-hot encoded)
-    and the second contains the labels (0 <=> edible, 1 <=> poisonous).
+    and the second contains the labels (0 <=> edible, 1 <=> poisonous). Also returns a
+    list which contains the number of components for the one-hot encoding of each feature.
     """
     FEATURES_LETTERS = [
         ['b', 'c', 'x', 'f', 'k', 's'],
@@ -77,13 +78,15 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray]:
             Y.append(y)
     
     assert len(X) == len(Y)
+
+    L = [len(fl) for fl in FEATURES_LETTERS]
     
-    return np.array(X, dtype=float), np.array(Y)
+    return np.array(X, dtype=float), np.array(Y), L
 
 
 if __name__ == "__main__":
     # Test loading the dataset
-    X, Y = agaricus_lepiota()
+    X, Y, _ = agaricus_lepiota()
     N = len(X)
     count_1 = len(list(filter(lambda y: y == 1, Y)))
 
