@@ -37,9 +37,9 @@ def tmc_shapley(
        the entire set of features, i.e. include all the features, with no overlaps, in
        ascending order; also, the intervals do include their extremes: an example of a
        valid `groups` partition is [(0, 3), (4, 4), (5, 8), (9, 10)] for a set of 11
-       features
+       features. By default a grouping in which every feature is by itself is used.
     - `n_samples` is the number of samples to compute, and defaults to 2*n where `n`
-      is the number of features
+      is the number of groups
     - `perf_tolerance` is a threshold for early termination of the samples evaluation
     - `v_init` is the value we assume for V({})
     - `save_results`, if True, dumps the results into a npy file
