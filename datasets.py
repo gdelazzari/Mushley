@@ -49,11 +49,18 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[int]]:
     # compute number of features after one-hot encoding
     Xn = sum([len(c) for c in FEATURES_LETTERS])
 
+    # replacement for Python 3.9+ str.removesuffix(..)
+    def removesuffix(s, x):
+        if s[-len(x):] == x:
+            return s[:-len(x)]
+        else:
+            return s
+
     X = []
     Y = []
     with open("agaricus-lepiota.data") as f:
         for line in f:
-            label_letter, *features_letters = line.removesuffix('\n').split(',')
+            label_letter, *features_letters = removesuffix(line, '\n').split(',')
 
             assert type(label_letter) == str
             assert type(features_letters) == list
