@@ -122,3 +122,21 @@ def prepare_dataset(X: np.ndarray, Y: np.ndarray, p: float) -> Tuple[Tuple[np.nd
     assert sum(Y_test)  == len(Y_test)  - sum(Y_test)
 
     return ((X_train, Y_train), (X_test, Y_test))
+
+def one_hot_groups(L: List[int]) -> List[Tuple[int, int]]:
+    """
+    Returns the consecutive groups for one-hot encoded features, assuming each feature
+    is sequentially laid out in the feature array without gaps.
+
+    Example: [2, 4, 3] => [(0, 1), (2, 5), (6, 8)]
+
+    The group indices are inclusive.
+    """
+    groups = []
+
+    i = 0
+    for l in L:
+        groups.append((i, i + l - 1))
+        i += l
+
+    return groups
