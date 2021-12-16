@@ -8,7 +8,8 @@ from shapley import tmc_shapley
 import matplotlib.pyplot as plt
 
 
-X, Y, L = datasets.agaricus_lepiota()
+X, Y, fds = datasets.agaricus_lepiota()
+L = [fd.num_values for fd in fds]
 
 (X_train, Y_train), (X_test, Y_test) = utils.prepare_dataset(X, Y, 0.8)
 
@@ -23,7 +24,7 @@ vD = v(c, X_train, Y_train, X_test, Y_test)
 print(f"Score of whole ensemble of features: {vD}\n")
 
 print("TMC-Shapley:")
-sh = tmc_shapley(X_train, Y_train, X_test, Y_test, c, v, groups=utils.one_hot_groups(L))
+sh = tmc_shapley(X_train, Y_train, X_test, Y_test, c, v, groups=utils.one_hot_groups(L), n_samples=1000, perf_tolerance=0.001)
 plt.barh(y=np.arange(len(sh)), width=list(sh))
 plt.show()
 

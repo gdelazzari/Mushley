@@ -1,9 +1,16 @@
 import numpy as np
 
 from typing import Tuple, List
+from dataclasses import dataclass
 
 
-def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[int]]:
+@dataclass
+class ALFeature:
+    name: str
+    num_values: int
+
+
+def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
     """
     Source:
     https://archive.ics.uci.edu/ml/datasets/Mushroom
@@ -14,8 +21,33 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[int]]:
     Returns the loaded dataset as a tuple of NumPy arrays, where the first contains
     (for each sample) the concatenation of all the features (which are one-hot encoded)
     and the second contains the labels (0 <=> edible, 1 <=> poisonous). Also returns a
-    list which contains the number of components for the one-hot encoding of each feature.
+    list which contains a small description of each feature as a `ALFeature` object.
     """
+    FEATURES_NAMES = [
+        'cap-shape',
+        'cap-surface',
+        'cap-color',
+        'bruises?',
+        'odor',
+        'gill-attachment',
+        'gill-spacing',
+        'gill-size',
+        'gill-color',
+        'stalk-shape',
+        'stalk-root',
+        'stalk-surface-above-ring',
+        'stalk-surface-below-ring',
+        'stalk-color-above-ring',
+        'stalk-color-below-ring',
+        'veil-type',
+        'veil-color',
+        'ring-number',
+        'ring-type',
+        'spore-print-color',
+        'population',
+        'habitat'
+    ]
+
     FEATURES_LETTERS = [
         ['b', 'c', 'x', 'f', 'k', 's'],
         ['f', 'g', 'y', 's'],
@@ -79,9 +111,9 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[int]]:
     
     assert len(X) == len(Y)
 
-    L = [len(fl) for fl in FEATURES_LETTERS]
+    fds = [ALFeature(name, len(fl)) for name, fl in zip(FEATURES_NAMES, FEATURES_LETTERS)]
     
-    return np.array(X, dtype=float), np.array(Y), L
+    return np.array(X, dtype=float), np.array(Y), fds
 
 
 if __name__ == "__main__":
