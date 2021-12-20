@@ -48,6 +48,8 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
         'habitat'
     ]
 
+    MISSING_FEATURE_LETTER = '?'
+
     FEATURES_LETTERS = [
         ['b', 'c', 'x', 'f', 'k', 's'],
         ['f', 'g', 'y', 's'],
@@ -59,7 +61,7 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
         ['b', 'n'],
         ['k', 'n', 'b', 'h', 'g', 'r', 'o', 'p', 'u', 'e', 'w', 'y'],
         ['e', 't'],
-        ['b', 'c', 'u', 'e', 'z', 'r', '?'],
+        ['b', 'c', 'u', 'e', 'z', 'r'],
         ['f', 'y', 'k', 's'],
         ['f', 'y', 'k', 's'],
         ['n', 'b', 'c', 'g', 'o', 'p', 'e', 'w', 'y'],
@@ -97,12 +99,15 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
             idx = 0 # track the starting index of the current feature
             for i, feature_letter in enumerate(features_letters):
                 assert i < 22
-                assert feature_letter in FEATURES_LETTERS[i]
+                assert feature_letter in FEATURES_LETTERS[i] or feature_letter == MISSING_FEATURE_LETTER
 
-                feature_value = FEATURES_LETTERS[i].index(feature_letter)
+                if feature_letter != MISSING_FEATURE_LETTER:
+                    feature_value = FEATURES_LETTERS[i].index(feature_letter)
 
-                # one-hot encode the feature value into the feature vector X
-                x[idx + feature_value] = 1.0
+                    # one-hot encode the feature value into the feature vector X only if it is not
+                    # missing (if it is missing, the one-hot vector associated to this feature is left
+                    # at zero in all of its components)
+                    x[idx + feature_value] = 1.0
 
                 idx += len(FEATURES_LETTERS[i])
      
