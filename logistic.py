@@ -32,8 +32,8 @@ print(f"(using {len(Y_train) + len(Y_test)} samples out of {len(Y)} available)")
 print(f"Score of whole ensemble of features: {vD}\n")
 
 print("TMC-Shapley:")
-sh = tmc_shapley(X_train, Y_train, X_test, Y_test, c, v, groups=utils.one_hot_groups(L), n_samples=1000, perf_tolerance=0.001)
-plt.barh(y=np.arange(len(sh)), width=list(sh))
+sh, sh_var = tmc_shapley(X_train, Y_train, X_test, Y_test, c, v, groups=utils.one_hot_groups(L), n_samples=1000, perf_tolerance=0.001)
+plt.barh(y=np.arange(len(sh)), xerr=np.sqrt(sh_var)*2, width=list(sh), capsize=3)
 plt.show()
 
 # Check on Shapley values: sum must be equal to the total ensemble score
