@@ -139,7 +139,7 @@ def tmc_shapley(
     shapley_var = np.zeros(n)
     for i in range(n):
         mu = shapley[i]
-        shapley_var[i] = np.var(np.array(shapley_chi[i]) - mu) / n_samples
+        shapley_var[i] = np.var(np.array(shapley_chi[i]) - mu) / len(shapley_chi[i])
 
     if save_results:
         basename = f"{n}-{n_samples}-{perf_tolerance}-{v_init}"
