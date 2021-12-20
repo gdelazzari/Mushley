@@ -123,16 +123,17 @@ def tmc_shapley(
                 shapley_chi[perm_groups[j - 1]].append(chi)
 
                 v_prev = v
+        
+        # if early termination (by Ctrl+C, see below) didn't happen, we expect for each feature to
+        # have collected exactly `n_samples` characteristics
+        for i in range(n):
+            assert len(shapley_chi[i]) == n_samples
     
     except KeyboardInterrupt:
         # Allow to break early with Ctrl+C.
         # Since the result in `shapley` is iteratively computed, it is valid
         # even in such case.
         pass
-
-    # we expect, for each feature, exactly `n_samples` characteristics
-    for i in range(n):
-        assert len(shapley_chi[i]) == n_samples
     
     # compute the variance of the estimation
     shapley_var = np.zeros(n)
