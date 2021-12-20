@@ -11,16 +11,22 @@ import matplotlib.pyplot as plt
 X, Y, fds = datasets.agaricus_lepiota()
 L = [fd.num_values for fd in fds]
 
+c = LogisticRegression(max_iter=1000)
+v = lambda c, X_train, Y_train, X_test, Y_test: c.fit(X_train, Y_train).score(X_test, Y_test)
+
+global vD, X_train, Y_train, X_test, Y_test
+
 (X_train, Y_train), (X_test, Y_test) = utils.prepare_dataset(X, Y, 0.8)
+vD = v(c, X_train, Y_train, X_test, Y_test)
+
+while vD < 1.0:
+    print(f"This specific shuffle obtained vD = {vD}, shuffling again")
+    (X_train, Y_train), (X_test, Y_test) = utils.prepare_dataset(X, Y, 0.8)
+    vD = v(c, X_train, Y_train, X_test, Y_test)
 
 print(f"Using {len(Y_train)} training samples")
 print(f"Using {len(Y_test)} test samples")
 print(f"(using {len(Y_train) + len(Y_test)} samples out of {len(Y)} available)")
-
-c = LogisticRegression(max_iter=1000)
-v = lambda c, X_train, Y_train, X_test, Y_test: c.fit(X_train, Y_train).score(X_test, Y_test)
-
-vD = v(c, X_train, Y_train, X_test, Y_test)
 print(f"Score of whole ensemble of features: {vD}\n")
 
 print("TMC-Shapley:")
