@@ -19,6 +19,8 @@ global vD, X_train, Y_train, X_test, Y_test
 (X_train, Y_train), (X_test, Y_test) = utils.prepare_dataset(X, Y, 0.8)
 vD = v(c, X_train, Y_train, X_test, Y_test)
 
+# Ensure we pick a specific split & shuffle of the dataset that guarantees full score
+# when using all of the features
 while vD < 1.0:
     print(f"This specific shuffle obtained vD = {vD}, shuffling again")
     (X_train, Y_train), (X_test, Y_test) = utils.prepare_dataset(X, Y, 0.8)
