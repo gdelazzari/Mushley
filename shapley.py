@@ -21,7 +21,7 @@ def tmc_shapley(
     perf_tolerance: float = 0.01,
     v_init = 0.5,
     save_results=True
-) -> np.ndarray:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Uses the Truncated Monte Carlo algorithm to estimate the Shapley value for
     each feature. Besides the two sample sets, it is required to provide:
@@ -44,7 +44,8 @@ def tmc_shapley(
     - `v_init` is the value we assume for V({})
     - `save_results`, if True, dumps the results into a npy file
 
-    A NumPy array with the Shapley value associated to each feature is returned.
+    A NumPy array with the Shapley value associated to each feature is returned along
+    with a NumPy array with the variance for each value.
     """
     m = np.shape(X_train)[1]
 
@@ -76,6 +77,10 @@ def tmc_shapley(
 
     # initialize the vector of shapley values for each group of features
     shapley = np.zeros(n)
+
+    # initialize, for each Shapley value, a list of observed characteristics; this is needed
+    # to compute the variance at the end
+    shapley_chi = [[] for _ in range(n)]
 
     try:
         for t in tqdm(range(1, n_samples+1), desc="samples", position=0, smoothing=0.0):
@@ -111,15 +116,30 @@ def tmc_shapley(
                     v = v_prev
                 else:
                     v = v_func(classifier, perm_X_train[:, :e], Y_train, perm_X_test[:, :e], Y_test)
+                
+                chi = v - v_prev
 
-                shapley[perm_groups[j - 1]] = (t - 1) / t * shapley[perm_groups[j - 1]] + (v - v_prev) / t
+                shapley[perm_groups[j - 1]] = (t - 1) / t * shapley[perm_groups[j - 1]] + chi / t
+                shapley_chi[perm_groups[j - 1]].append(chi)
+
                 v_prev = v
+        
+        # if early termination (by Ctrl+C, see below) didn't happen, we expect for each feature to
+        # have collected exactly `n_samples` characteristics
+        for i in range(n):
+            assert len(shapley_chi[i]) == n_samples
     
     except KeyboardInterrupt:
         # Allow to break early with Ctrl+C.
         # Since the result in `shapley` is iteratively computed, it is valid
         # even in such case.
         pass
+    
+    # compute the variance of the estimation
+    shapley_var = np.zeros(n)
+    for i in range(n):
+        mu = shapley[i]
+        shapley_var[i] = np.var(np.array(shapley_chi[i]) - mu) / len(shapley_chi[i])
 
     if save_results:
         basename = f"{n}-{n_samples}-{perf_tolerance}-{v_init}"
@@ -129,5 +149,6 @@ def tmc_shapley(
             i += 1
         
         np.save(f"{basename}.{i}.npy", shapley)
+        np.save(f"{basename}.{i}.var.npy", shapley_var)
 
-    return shapley
+    return shapley, shapley_var
