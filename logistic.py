@@ -12,7 +12,7 @@ X, _, Y, fds = datasets.agaricus_lepiota()
 L = [fd.num_values for fd in fds]
 
 c = LogisticRegression(max_iter=1000)
-v = lambda c, X_train, Y_train, X_test, Y_test: c.fit(X_train, Y_train).score(X_test, Y_test)
+v = lambda c, X_train, Y_train, X_test, Y_test: 2 * (c.fit(X_train, Y_train).score(X_test, Y_test) - 0.5)
 
 global vD, X_train, Y_train, X_test, Y_test
 
