@@ -48,9 +48,7 @@ def set_size(width_pt, fraction=1, height_ratio=(5**.5-1)/2, subplots=(1, 1)):
 
 _, _, _, fds = datasets.agaricus_lepiota()
 
-sh, sh_var, shs = utils.average_heavysims('125-10000-0.001-0.5')
-
-sh *= 2.0
+sh, sh_var, shs = utils.average_heavysims('125-10000-0.001-0.0')
 
 if SAVE_PGF:
     plt.rcParams.update({

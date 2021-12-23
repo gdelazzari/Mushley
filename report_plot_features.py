@@ -42,31 +42,9 @@ def set_size(width_pt, fraction=1, height_ratio=(5**.5-1)/2, subplots=(1, 1)):
     return (fig_width_in, fig_height_in)
 
 
-def average_heavysims(basename):
-    single = []
-    avg = None
-    i = 0
-    while os.path.isfile(f"heavy-sims/{basename}.{i}.npy"):
-        sh = np.load(f"heavy-sims/{basename}.{i}.npy")
-        
-        if avg is None:
-            avg = np.zeros(sh.shape)
-        
-        avg += sh
-        single.append(sh)
-
-        i += 1
-    
-    avg /= len(single)
-
-    return avg, single
-
-
 _, _, _, fds = datasets.agaricus_lepiota()
 
-sh, shs = average_heavysims('22-10000-0.001-0.5')
-
-sh *= 2.0
+sh, sh_var, shs = utils.average_heavysims('22-10000-0.001-0.0')
 
 if SAVE_PGF:
     plt.rcParams.update({
