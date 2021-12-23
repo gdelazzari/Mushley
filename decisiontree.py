@@ -8,7 +8,7 @@ from shapley import tmc_shapley
 import matplotlib.pyplot as plt
 
 
-X, Y, fds = datasets.agaricus_lepiota_flat()
+_, X, Y, fds = datasets.agaricus_lepiota()
 L = [fd.num_values for fd in fds]
 
 c = DecisionTreeClassifier()

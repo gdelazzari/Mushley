@@ -62,7 +62,7 @@ def average_heavysims(basename):
     return avg, single
 
 
-_, _, fds = datasets.agaricus_lepiota()
+_, _, _, fds = datasets.agaricus_lepiota()
 
 sh, shs = average_heavysims('22-10000-0.001-0.5')
 

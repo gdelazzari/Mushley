@@ -8,7 +8,7 @@ from shapley import tmc_shapley
 import matplotlib.pyplot as plt
 
 
-X, Y, fds = datasets.agaricus_lepiota()
+X, _, Y, fds = datasets.agaricus_lepiota()
 L = [fd.num_values for fd in fds]
 
 c = LogisticRegression(max_iter=1000)
