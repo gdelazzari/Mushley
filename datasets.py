@@ -120,6 +120,93 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
     
     return np.array(X, dtype=float), np.array(Y), fds
 
+def agaricus_lepiota_flat() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
+    """
+    Another variant of the function above, which doesn't one-hot encode the features
+    """
+    FEATURES_NAMES = [
+        'cap-shape',
+        'cap-surface',
+        'cap-color',
+        'bruises?',
+        'odor',
+        'gill-attachment',
+        'gill-spacing',
+        'gill-size',
+        'gill-color',
+        'stalk-shape',
+        'stalk-root',
+        'stalk-surface-above-ring',
+        'stalk-surface-below-ring',
+        'stalk-color-above-ring',
+        'stalk-color-below-ring',
+        'veil-type',
+        'veil-color',
+        'ring-number',
+        'ring-type',
+        'spore-print-color',
+        'population',
+        'habitat'
+    ]
+
+    FEATURES_LETTERS = [
+        ['b', 'c', 'x', 'f', 'k', 's'],
+        ['f', 'g', 'y', 's'],
+        ['n', 'b', 'c', 'g', 'r', 'p', 'u', 'e', 'w', 'y'],
+        ['t', 'f'],
+        ['a', 'l', 'c', 'y', 'f', 'm', 'n', 'p', 's'],
+        ['a', 'd', 'f', 'n'],
+        ['c', 'w', 'd'],
+        ['b', 'n'],
+        ['k', 'n', 'b', 'h', 'g', 'r', 'o', 'p', 'u', 'e', 'w', 'y'],
+        ['e', 't'],
+        ['b', 'c', 'u', 'e', 'z', 'r', '?'],
+        ['f', 'y', 'k', 's'],
+        ['f', 'y', 'k', 's'],
+        ['n', 'b', 'c', 'g', 'o', 'p', 'e', 'w', 'y'],
+        ['n', 'b', 'c', 'g', 'o', 'p', 'e', 'w', 'y'],
+        ['p', 'u'],
+        ['n', 'o', 'w', 'y'],
+        ['n', 'o', 't'],
+        ['c', 'e', 'f', 'l', 'n', 'p', 's', 'z'],
+        ['k', 'n', 'b', 'h', 'r', 'o', 'u', 'w', 'y'],
+        ['a', 'c', 'n', 's', 'v', 'y'],
+        ['g', 'l', 'm', 'p', 'u', 'w', 'd'],
+    ]
+
+    LABEL_LETTERS = ['e', 'p']
+
+    assert len(FEATURES_LETTERS) == 22
+    assert len(LABEL_LETTERS) == 2
+
+    X = []
+    Y = []
+    with open("agaricus-lepiota.data") as f:
+        for line in f:
+            label_letter, *features_letters = line.removesuffix('\n').split(',')
+
+            assert type(label_letter) == str
+            assert type(features_letters) == list
+
+            assert label_letter in LABEL_LETTERS
+            y = LABEL_LETTERS.index(label_letter)
+
+            x = np.zeros(22, dtype=float)
+            for i, feature_letter in enumerate(features_letters):
+                assert i < 22
+                assert feature_letter in FEATURES_LETTERS[i]
+
+                x[i] = FEATURES_LETTERS[i].index(feature_letter)
+     
+            X.append(x)
+            Y.append(y)
+    
+    assert len(X) == len(Y)
+
+    fds = [ALFeature(name, len(fl)) for name, fl in zip(FEATURES_NAMES, FEATURES_LETTERS)]
+    
+    return np.array(X, dtype=float), np.array(Y), fds
+
 
 if __name__ == "__main__":
     # Test loading the dataset
