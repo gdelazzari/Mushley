@@ -19,7 +19,7 @@ def tmc_shapley(
     groups: Optional[List[Tuple[int, int]]] = None,
     n_samples: Optional[int] = None,
     perf_tolerance: float = 0.01,
-    v_init = 0.5,
+    v_init = 0.0,
     save_results=True
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
