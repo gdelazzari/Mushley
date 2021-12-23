@@ -1,6 +1,8 @@
 import numpy as np
 from typing import Tuple, List, Optional
 
+import os
+
 
 def shuffle(X: np.ndarray, Y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     """
@@ -140,3 +142,32 @@ def one_hot_groups(L: List[int]) -> List[Tuple[int, int]]:
         i += l
 
     return groups
+
+def average_heavysims(basename, load_var=True):
+    single = []
+    avg = None
+    var = None
+    i = 0
+    while os.path.isfile(f"heavy-sims/{basename}.{i}.npy"):
+        sh = np.load(f"heavy-sims/{basename}.{i}.npy")
+        
+        if avg is None:
+            avg = np.zeros(sh.shape)
+        
+        avg += sh
+        single.append(sh)
+
+        if load_var:
+            sh_var = np.load(f"heavy-sims/{basename}.{i}.var.npy")
+            if var is None:
+                var = np.zeros(sh_var.shape)
+                assert var.shape == avg.shape
+            
+            var += sh_var
+
+        i += 1
+    
+    avg /= len(single)
+    var /= len(single) ** 2
+
+    return avg, var, single
