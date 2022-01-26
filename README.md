@@ -1,29 +1,44 @@
 # Mushley
 
-Applying Shapley values to mushroom edibility classification.
+Shapley value for feature evaluation in a mushroom edibility classification problem.
 
-## TODOs
-See [issues](https://github.com/gdelazzari/Mushley/issues).
+Francesco Lorenzi, Giacomo De Lazzari - Department of Information Engineering, University of Padova
 
-## Current repository structure
+## Report
+The code and the work stored here is strictly associated to our project for the Game Theory course held by professor Leonardo Badia at our university.
+
+The report is [included in the repository](./report.pdf).
+
+## Repository structure
 The following Python modules are implemented:
 - `datasets.py` provides a way to load the [ics.uci.edu mushroom dataset](https://archive.ics.uci.edu/ml/datasets/Mushroom).
 - `utils.py` provides some utility methods (shuffle, split, ...) for working with datasets.
-- `logistic.py` tests a LogisticRegression classifier (from scikit-learn) and computes the Shapley value for each feature.
+- `logistic.py` tests a LogisticRegression classifier (from scikit-learn) on the one-hot encoded features and computes the Shapley value for each one of them.
 - `decisiontree.py` tests a DecisionTreeClassifier (from scikit-learn) and computes the Shapley value for each feature.
-- `shapley.py` implements the Truncated Monte Carlo method for approximating Shapley values in a generic way.
+- `shapley.py` implements the Truncated Monte Carlo (TMC) method for approximating Shapley values in a generic way.
 - `agaricus-lepiota.data` is the actual dataset which is included in the repository for convenience.
 - `plot.py` can be used to plot the `.npy` files produced by the simulations
+- `report_plot_features.py` can be used to plot the Shapley values at feature granularity.
+- `report_plot_qualia.py` can be used to plot the Shapley values at *qualia* (single one-hot encoded vector component) granularity.
+- `pca.py` has been used to explore the feature space of the dataset.
 
 ## Getting started
-The only meaningful thing to do right now is
+To reproduce the plot obtained in the report, the following steps can be taken
 
 ```console
-$ python logistic.py
-$ python kneighbors.py
+$ python decisiontree.py
+$ mkdir heavy-sims
+$ mv *.npy heavy-sims/
+$ python report_plot_features.py
 ```
 
-to verify the performance of the classifiers.
+### Workflow in brief
+In short, the following scripts
 
-## References
+- `logistic.py`
+- `decisiontree.py`
+
+run simulations (with different models) and produce `.npy` files with the resulting averages of all the Monte Carlo samples. The filename encodes the simulation parameters (number of samples, early termination condition threshold, ...). "Heavy" simulations results are stored in the special folder `heavy-sims`, from which the `report_plot_*.py` scripts load the raw data from.
+
+## References used in the commit messages
 [1]: Ghorbani, A. and Zou, J., “Data Shapley: Equitable Valuation of Data for Machine Learning”, *arXiv e-prints*, 2019
