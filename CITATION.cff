@@ -8,3 +8,4 @@ authors:
 title: "Shapley value for feature evaluation in a mushroom edibility classification problem"
 version: 1.0.0
 date-released: 2022-01-26
+repository-code: "https://github.com/gdelazzari/Mushley"
