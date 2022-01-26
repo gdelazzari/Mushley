@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Lorenzi
+    given-names: Francesco
+  - family-names: De Lazzari
+    given-names: Giacomo
+title: "Shapley value for feature evaluation in a mushroom edibility classification problem"
+version: 1.0.0
+date-released: 2022-01-26
