@@ -44,7 +44,10 @@ def set_size(width_pt, fraction=1, height_ratio=(5**.5-1)/2, subplots=(1, 1)):
 
 _, _, _, fds = datasets.agaricus_lepiota()
 
-sh, sh_var, shs = utils.average_heavysims('22-10000-0.001-0.0')
+sh, sh_var, shs = utils.average_heavysims('22-100000-0.001-0.0')
+
+sum_devstd = np.sqrt(np.sum(sh_var))
+print(f"\nSum of all Shapley values: {np.sum(sh)} +- {2 * sum_devstd}\n")
 
 if SAVE_PGF:
     plt.rcParams.update({
