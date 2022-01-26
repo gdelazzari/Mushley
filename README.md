@@ -22,6 +22,15 @@ The following Python modules are implemented:
 - `report_plot_qualia.py` can be used to plot the Shapley values at *qualia* (single one-hot encoded vector component) granularity.
 - `pca.py` has been used to explore the feature space of the dataset.
 
+## TMC Shapley implementation details
+The implementation of the Truncated Monte Carlo algorithm is found in the module `shapley.py`, and has been implemented in a generic way.
+
+Evaluating the Shapley value for groups of consecutive features is also possible by specifying a partition of the feature space as a parameter. This was used, when exploring a linear classifier on one-hot encoded features, to obtain the Shapley values of groups of *qualia*, thus obtaining the values for the single entire feature and not of its sub-components.
+
+The implementation is in pure Python with the help on NumPy where possible.
+
+Given that simulations can run for a long time, the `tmc_shapley` function is interactive in the sense that the progress is shown in real-time with tqdm and `CTRL+C` can be used to safely stop the simulation early, resulting in the samples collected up until now to be used for a partial estimate.
+
 ## Getting started
 To reproduce the plot obtained in the report, the following steps can be taken
 
