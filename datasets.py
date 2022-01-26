@@ -10,7 +10,7 @@ class ALFeature:
     num_values: int
 
 
-def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
+def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, np.ndarray, List[ALFeature]]:
     """
     Source:
     https://archive.ics.uci.edu/ml/datasets/Mushroom
@@ -19,9 +19,11 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
     folder.
     
     Returns the loaded dataset as a tuple of NumPy arrays, where the first contains
-    (for each sample) the concatenation of all the features (which are one-hot encoded)
-    and the second contains the labels (0 <=> edible, 1 <=> poisonous). Also returns a
-    list which contains a small description of each feature as a `ALFeature` object.
+    (for each sample) the concatenation of all the features (which are one-hot encoded),
+    the second contains (for each sample) the raw features as integer numbers and the
+    the third contains (for each sample) the labels (0 <=> edible, 1 <=> poisonous).
+    Also returns a list which contains a small description of each feature as a
+    `ALFeature` object.
     """
     FEATURES_NAMES = [
         'cap-shape',
@@ -83,8 +85,10 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
     # compute number of features after one-hot encoding
     Xn = sum([len(c) for c in FEATURES_LETTERS])
 
-    X = []
-    Y = []
+    X  = [] # one-hot encoded feature vectors
+    Xr = [] # raw feature vectors
+    Y  = [] # labels
+
     with open("agaricus-lepiota.data") as f:
         for line in f:
             label_letter, *features_letters = line.removesuffix('\n').split(',')
@@ -96,7 +100,10 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
             y = LABEL_LETTERS.index(label_letter)
 
             x = np.zeros(Xn, dtype=float)
-            idx = 0 # track the starting index of the current feature
+            xr = np.zeros(22, dtype=int)
+
+            idx = 0 # track the starting index of the current feature in the one-hot encoded vector
+
             for i, feature_letter in enumerate(features_letters):
                 assert i < 22
                 assert feature_letter in FEATURES_LETTERS[i] or feature_letter == MISSING_FEATURE_LETTER
@@ -109,16 +116,27 @@ def agaricus_lepiota() -> Tuple[np.ndarray, np.ndarray, List[ALFeature]]:
                     # at zero in all of its components)
                     x[idx + feature_value] = 1.0
 
+                    # store the raw feature
+                    xr[i] = feature_value
+                else:
+                    # if the feature is missing, the one-hot encoding is correct (i.e. all components
+                    # are left as zero), but the raw encoding must be handled separately: here we set
+                    # the value to -1 to represet the fact that the feature is missing with another
+                    # category
+                    xr[i] = -1
+
                 idx += len(FEATURES_LETTERS[i])
      
             X.append(x)
+            Xr.append(xr)
             Y.append(y)
     
     assert len(X) == len(Y)
+    assert len(Xr) == len(Y)
 
     fds = [ALFeature(name, len(fl)) for name, fl in zip(FEATURES_NAMES, FEATURES_LETTERS)]
     
-    return np.array(X, dtype=float), np.array(Y), fds
+    return np.array(X, dtype=float), np.array(Xr, dtype=int), np.array(Y), fds
 
 
 if __name__ == "__main__":

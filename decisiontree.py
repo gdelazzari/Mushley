@@ -1,6 +1,6 @@
 import numpy as np
 
-from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
 
 import datasets
 import utils
@@ -8,10 +8,10 @@ from shapley import tmc_shapley
 import matplotlib.pyplot as plt
 
 
-X, _, Y, fds = datasets.agaricus_lepiota()
+_, X, Y, fds = datasets.agaricus_lepiota()
 L = [fd.num_values for fd in fds]
 
-c = LogisticRegression(max_iter=1000)
+c = DecisionTreeClassifier()
 v = lambda c, X_train, Y_train, X_test, Y_test: 2 * (c.fit(X_train, Y_train).score(X_test, Y_test) - 0.5)
 
 global vD, X_train, Y_train, X_test, Y_test
@@ -32,13 +32,13 @@ print(f"(using {len(Y_train) + len(Y_test)} samples out of {len(Y)} available)")
 print(f"Score of whole ensemble of features: {vD}\n")
 
 print("TMC-Shapley:")
-sh, sh_var = tmc_shapley(X_train, Y_train, X_test, Y_test, c, v, groups=utils.one_hot_groups(L), n_samples=1000, perf_tolerance=0.001)
+sh, sh_var = tmc_shapley(X_train, Y_train, X_test, Y_test, c, v, n_samples=100000, perf_tolerance=0.001, v_init=0.0)
+sh_devstd = np.sqrt(sh_var)
+print(sh)
+print(sh_var)
+print(sh_devstd * 2)
 plt.barh(y=np.arange(len(sh)), xerr=np.sqrt(sh_var)*2, width=list(sh), capsize=3)
 plt.show()
 
 # Check on Shapley values: sum must be equal to the total ensemble score
-# Check the distribution also
 print(f"\nSum of all Shapley values: {np.sum(sh)}\n")
-n_bins = 20
-plt.hist(sh, bins=n_bins)
-plt.show()
