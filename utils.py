@@ -149,7 +149,10 @@ def average_heavysims(basename, load_var=True):
     var = None
     i = 0
     while os.path.isfile(f"heavy-sims/{basename}.{i}.npy"):
-        sh = np.load(f"heavy-sims/{basename}.{i}.npy")
+        filename = f"heavy-sims/{basename}.{i}.npy"
+
+        sh = np.load(filename)
+        print(f"loaded {filename}")
         
         if avg is None:
             avg = np.zeros(sh.shape)
@@ -158,7 +161,10 @@ def average_heavysims(basename, load_var=True):
         single.append(sh)
 
         if load_var:
-            sh_var = np.load(f"heavy-sims/{basename}.{i}.var.npy")
+            filename = f"heavy-sims/{basename}.{i}.var.npy"
+            sh_var = np.load(filename)
+            print(f"loaded {filename}")
+
             if var is None:
                 var = np.zeros(sh_var.shape)
                 assert var.shape == avg.shape
