@@ -21,6 +21,7 @@ The following Python modules are implemented:
 - `report_plot_features.py` can be used to plot the Shapley values at feature granularity.
 - `report_plot_qualia.py` can be used to plot the Shapley values at *qualia* (single one-hot encoded vector component) granularity.
 - `pca.py` has been used to explore the feature space of the dataset.
+- `validate.py` is a quite messy script which has been used to test various assumptions and properties of the obtained experimental results.
 
 ## TMC Shapley implementation details
 The implementation of the Truncated Monte Carlo algorithm is found in the module `shapley.py`, and has been implemented in a generic way.
