@@ -1,4 +1,4 @@
-SAVE_PGF = True
+SAVE_PGF = False
 
 import numpy as np
 import datasets
